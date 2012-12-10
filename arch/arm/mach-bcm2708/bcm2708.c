@@ -55,6 +55,8 @@
 #include <mach/system.h>
 
 #include <linux/delay.h>
+#include <linux/gpio.h>
+#include <linux/irq.h>
 
 #include "bcm2708.h"
 #include "armctrl.h"
@@ -586,10 +588,11 @@ static struct platform_device bcm2708_spi_device = {
 };
 
 #ifdef CONFIG_SPI
+#define MRF24J40MA_INT_GPIO_PIN 22
 static struct spi_board_info bcm2708_spi_devices[] = {
 	{
-		.modalias = "spidev",
-		.max_speed_hz = 500000,
+		.modalias = "mrf24j40",
+		.max_speed_hz = 12000000,
 		.bus_num = 0,
 		.chip_select = 0,
 		.mode = SPI_MODE_0,
@@ -748,6 +751,8 @@ void __init bcm2708_init(void)
 	system_serial_low = serial;
 
 #ifdef CONFIG_SPI
+	bcm2708_spi_devices[0].irq = gpio_to_irq(MRF24J40MA_INT_GPIO_PIN),
+
 	spi_register_board_info(bcm2708_spi_devices,
 			ARRAY_SIZE(bcm2708_spi_devices));
 #endif
