@@ -549,6 +549,7 @@ static struct platform_device bcm2708_spi_device = {
 };
 
 #ifdef CONFIG_BCM2708_SPIDEV
+#define MRF24J40MA_INT_GPIO_PIN 22
 static struct spi_board_info bcm2708_spi_devices[] = {
 #ifdef CONFIG_SPI_SPIDEV
 	{
